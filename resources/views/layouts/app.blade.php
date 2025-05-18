@@ -51,18 +51,17 @@
     <!-- ./Main Content -->
 
     <!-- footer -->
-    <footer class="bg-primary pt-16 pb-12 border-t border-gray-100">
+    <footer class="bg-gray-800 pt-12 pb-10 border-t border-gray-100">
         @include('components.home.footer')
     </footer>
     <!-- ./footer -->
 
     <!-- copyright -->
     <div class="bg-gray-800 py-4">
-        <div class="container flex items-center justify-between">
-            <p class="text-white">&copy;2025 BookBuyBD - All Right Reserved</p>
-            <div>
-                <img src="assets/images/methods.png" alt="methods" class="h-5">
-            </div>
+        <div class="container flex flex-col justify-center space-y-2 text-white">
+            <p>&copy;2025 BookBuyBD - All Rights Reserved</p>
+            <a href="#" class="hover:underline hover:cursor-pointer">Terms of Service</a>
+            <a href="#" class="hover:underline hover:cursor-pointer">Privacy Policy</a>
         </div>
     </div>
 

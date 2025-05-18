@@ -1,7 +1,7 @@
- <header class="py-4 shadow-sm bg-white">
+ <header class="py-2 shadow-sm bg-white">
      <div class="container flex items-center justify-between">
          <a href="index.html">
-             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-32">
+             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-36">
          </a>
 
          <div class="w-full max-w-xl relative flex">
