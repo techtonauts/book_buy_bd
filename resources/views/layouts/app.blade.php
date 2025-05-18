@@ -23,6 +23,8 @@
 </head>
 
 <body>
+
+
     <!-- Top Announcement Bar -->
     <div class="bg-primary text-white py-2 overflow-hidden">
         <div class="flex-1">
@@ -31,13 +33,15 @@
         </div>
     </div>
 
+    <div class="sticky top-0 z-50">
 
-    <!-- Header Section -->
+        <!-- Header Section -->
 
-    @include('components.home.header')
+        @include('components.home.header')
 
-    <!-- Navbar Section -->
-    @include('components.home.nav')
+        <!-- Navbar Section -->
+        @include('components.home.nav')
+    </div>
 
 
     <!-- Main Content -->
@@ -61,6 +65,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <!-- Scripts -->
 

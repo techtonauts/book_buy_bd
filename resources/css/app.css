@@ -18,6 +18,7 @@
 
     /* Colors */
     --color-primary: oklch(63.52% 0.134 247.67);
+    --color-accent: #d1f8ef;
 }
 
 /* Base Styles */

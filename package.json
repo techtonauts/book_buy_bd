@@ -3,14 +3,20 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "cross-env NODE_ENV=development concurrently \"npm run dev-vite\" \"npm run dev-artisan\"",
+        "dev-vite": "vite",
+        "dev-artisan": "php artisan serve --port=8001"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
+        "cross-env": "^7.0.3",
         "laravel-vite-plugin": "^1.2.0",
         "tailwindcss": "^4.0.0",
         "vite": "^6.2.4"
+    },
+    "dependencies": {
+        "alpinejs": "^3.14.9"
     }
 }
