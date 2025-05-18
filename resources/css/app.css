@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    /* Screens */
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+
+    /* Font Families */
+    --font-poppins: "Poppins", sans-serif;
+    --font-roboto: "Roboto", sans-serif;
+
+    /* Colors */
+    --color-primary: oklch(63.52% 0.134 247.67);
+}
+
+/* Base Styles */
+@layer base {
+    body {
+        @apply font-poppins;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-roboto;
+    }
+}
+
+@utility container {
+    padding-inline: 1rem;
+    margin-inline: auto;
+}
+
+@layer components {
+    .size-selector input:checked + label {
+        @apply bg-primary text-white;
+    }
+    .color-selector input:checked + label {
+        @apply ring-2 ring-primary;
+    }
+
+    .input-box {
+        @apply block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded placeholder-gray-400 focus:border-primary focus:ring-0;
+    }
+
+    .marquee {
+        @apply inline-block whitespace-nowrap animate-[marquee_15s_linear_infinite];
+    }
+
+    .marquee:hover {
+        animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+}
