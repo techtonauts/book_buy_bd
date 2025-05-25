@@ -1,10 +1,10 @@
- <header class="py-2 shadow-sm bg-white">
+ <header class="bg-white h-20">
      <div class="container flex items-center justify-between">
-         <a href="index.html">
-             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-36">
+         <a href="{{ route('show.home') }}"">
+             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-28 h-auto py-2">
          </a>
 
-         <div class="w-full max-w-xl relative flex">
+         <div class="w-full max-w-md relative flex justify-center">
              <span class="absolute left-4 top-3 text-lg text-gray-400">
                  <i class="fa-solid fa-magnifying-glass"></i>
              </span>

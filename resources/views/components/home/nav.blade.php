@@ -1,5 +1,5 @@
 <!-- navbar -->
-<nav class="bg-gray-800">
+<nav class="bg-gray-800 mt-0">
     <div class="container flex justify-center items-center">
         <x-frontend.category-navbar />
 
@@ -9,7 +9,13 @@
                     class="block px-4 py-2 text-gray-200 hover:text-white hover:border hover:border-gray-700 hover:bg-primary hover:rounded-md transition">
                     Home</a>
                 <a href="#"
-                    class="block px-4 py-2 text-gray-200 hover:text-white hover:border hover:border-gray-700 hover:bg-primary  hover:rounded-md transition">Shop</a>
+                    class="block px-4 py-2 text-gray-200 hover:text-white hover:border hover:border-gray-700 hover:bg-primary  hover:rounded-md transition">
+                    Shop
+                </a>
+                <a href="#"
+                    class="block px-4 py-2 text-gray-200 hover:text-white hover:border hover:border-gray-700 hover:bg-primary  hover:rounded-md transition">
+                    Custom Order
+                </a>
                 <a href="#"
                     class="block px-4 py-2 text-gray-200 hover:text-white hover:border hover:border-gray-700 hover:bg-primary hover:rounded-md transition">About
                     us</a>

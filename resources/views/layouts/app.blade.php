@@ -26,7 +26,7 @@
 
 
     <!-- Top Announcement Bar -->
-    <div class="bg-primary text-white py-2 overflow-hidden">
+    <div x-data="@yield('showOffer', '{open:true}')" x-show="open" class="bg-primary text-white py-2 overflow-hidden">
         <div class="flex-1">
             <p class="marquee">B/W Printing @ ৳0.75 per page | Free Delivery on orders over ৳1000 | <a
                     href="#">Shop Now</a></p>

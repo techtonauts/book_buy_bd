@@ -10,7 +10,7 @@
     </button>
 
     {{-- Category Menu Dropdown --}}
-    <div x-data="{ activeCategory: null }" class="absolute left-0 right-0 bg-white shadow-lg z-50"
+    <div x-data="{ activeCategory: null }" class="absolute left-0 right-0 shadow-lg z-50"
         style="width: calc(100vw - 1rem); max-width: 1200px;" x-show="showCategories"
         @mouseenter="showCategories = true" @mouseleave="showCategories = false"
         x-transition:enter="transition ease-out duration-200"
@@ -23,13 +23,13 @@
         {{-- Two-column layout --}}
         <div class="flex">
             {{-- Main Categories column --}}
-            <div class="w-1/4 bg-blue-300 py-1 px-1">
+            <div class="w-1/4 bg-primary py-1 px-1">
                 @foreach ($categories as $category)
-                    <div @mouseenter="activeCategory = {{ $category['id'] }}"
-                        :class="{ 'bg-gray-200 border border-gray-400 rounded-md': activeCategory === {{ $category['id'] }} }">
+                    <div @mouseenter="activeCategory = {{ $category->id }}"
+                        :class="{ 'bg-gray-200 border border-gray-400 rounded-md': activeCategory === {{ $category->id }} }">
                         <a href="#"
-                            class="block px-4 py-2 text-gray-700 font-semibold hover:bg-gray-200 hover:border hover:border-gray-400 hover:rounded-md transition">
-                            {{ $category['name'] }}
+                            class="block px-4 py-2 text-white font-semibold hover:bg-gray-200 hover:text-gray-800 hover:border hover:border-gray-400 hover:rounded-md transition">
+                            {{ $category->name }}
                         </a>
                     </div>
                 @endforeach
@@ -38,17 +38,17 @@
             {{-- Subcategories column --}}
             <div class="w-3/4 bg-blue-100 py-2">
                 @foreach ($categories as $category)
-                    <div class="container px-6 py-2" x-show="activeCategory === {{ $category['id'] }}"
+                    <div class="container px-6 py-2" x-show="activeCategory === {{ $category->id }}"
                         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
                         x-transition:enter-end="opacity-100">
 
-                        <h3 class="font-semibold border-b text-gray-800 mb-2 py-2">{{ $category['name'] }}</h3>
+                        <h3 class="font-semibold border-b text-gray-800 mb-2 py-2">{{ $category->name }}</h3>
 
                         <div class="grid grid-cols-3 gap-2">
-                            @foreach ($category['subcategories'] as $subcategory)
+                            @foreach ($category->children as $subcategory)
                                 <a href="#"
                                     class="block bg-accent py-1 px-2 border border-white rounded-md text-gray-700 hover:bg-transparent hover:border-gray-400 hover:rounded-md transition">
-                                    {{ $subcategory['name'] }}
+                                    {{ $subcategory->name }}
                                 </a>
                             @endforeach
                         </div>
