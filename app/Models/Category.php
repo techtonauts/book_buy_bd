@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
+use App\Models\Book;
 
 class Category extends Model
 {
@@ -15,6 +17,10 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    public function books()
+    {
+        return $this->hasMany(Book::class);
     }
 
     public function parent()

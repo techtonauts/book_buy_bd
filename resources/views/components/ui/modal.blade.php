@@ -1,4 +1,4 @@
-<div x-data="{ open: false }" class="relative">
+<div x-data="{ open: false, hasFooter: {{ $hasFooter ?? 'false' }} }" class="relative">
     <!-- Trigger Button -->
     <button @click="open = true"
         class="{{ $triggerClass ?? 'inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600' }}"
@@ -35,8 +35,12 @@
             </div>
 
             <!-- Modal Footer -->
-            <div class="mt-6 flex justify-end space-x-3">
-                {{ $footer ?? '' }}
+            <div x-show='hasFooter' class="mt-6 flex justify-end space-x-3 items-center px-5 py-4 sm:px-6 sm:py-5">
+                <button @click="open = false"
+                    class="px-4 py-2 text-sm font-medium text-gray-800 transition rounded-lg bg-gray-200 hover:bg-gray-300">
+                    Cancel
+                </button>
+                {{ $confirmButton ?? '' }}
             </div>
         </div>
     </div>

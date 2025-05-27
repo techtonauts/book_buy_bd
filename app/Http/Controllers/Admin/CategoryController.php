@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 
 class CategoryController extends Controller
 {
@@ -43,6 +44,9 @@ class CategoryController extends Controller
 
         Category::create($validated);
 
+        if ($validated['parent_id']) {
+            return redirect()->route('admin.show.sub.categories')->with('success', 'Sub-category created successfully.');
+        }
         return redirect()->route('admin.show.main.categories')->with('success', 'Category created successfully.');
     }
 
@@ -57,6 +61,29 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->update($validated);
 
+        if ($validated['parent_id']) {
+            return redirect()->route('admin.show.sub.categories')->with('success', 'Sub-category updated successfully.');
+        }
         return redirect()->route('admin.show.main.categories')->with('success', 'Category updated successfully.');
+    }
+
+    public function delete($id)
+    {
+        $category = Category::findOrFail($id);
+        $isParent = $category->parent_id === null;
+
+        if (Auth::user()->user_type !== 'superadmin' || Auth::user()->user_type !== 'admin') {
+            if ($isParent) {
+                return redirect()->route('admin.show.main.categories')->with('error', 'Unauthorized action.');
+            }
+            return redirect()->route('admin.show.main.categories')->with('error', 'Unauthorized action.');
+        }
+
+        $category->delete();
+
+        if ($isParent) {
+            return redirect()->route('admin.show.main.categories')->with('success', 'Category deleted successfully.');
+        }
+        return redirect()->route('admin.show.sub.categories')->with('success', 'Sub-category deleted successfully.');
     }
 }

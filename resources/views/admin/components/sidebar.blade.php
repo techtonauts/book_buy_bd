@@ -188,6 +188,56 @@
                         </div>
                         <!-- Dropdown Menu End -->
                     </li>
+                    <!-- Menu Item Books-->
+                    <li>
+                        <a href="#" @click.prevent="selected = (selected === 'Books' ? '':'Books')"
+                            class="menu-item group"
+                            :class="(selected === 'Books') || (page === 'allBooks' || page==='createBooks') ?
+                            'menu-item-active' : 'menu-item-inactive'">
+                            <i
+                                :class="(selected === 'Books') || (page === 'allBooks' || page==='createBooks') ?
+                                'menu-item-icon-active fa-solid fa-book fa-lg' :
+                                'menu-item-icon-inactive fa-solid fa-book fa-lg'">
+                            </i>
+
+                            <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                                Books
+                            </span>
+
+                            <svg class="menu-item-arrow"
+                                :class="[(selected === 'Books') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive',
+                                    sidebarToggle ? 'lg:hidden' : ''
+                                ]"
+                                width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585" stroke=""
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <!-- Dropdown Menu Start -->
+                        <div class="overflow-hidden transform translate"
+                            :class="(selected === 'Books') ? 'block' : 'hidden'">
+                            <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                                <li>
+                                    <a href="{{ route('admin.show.books') }}" class="menu-dropdown-item group"
+                                        :class="page === 'allBooks' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        All Books
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.show.create.books') }}" class="menu-dropdown-item group"
+                                        :class="page === 'createBooks' ? 'menu-dropdown-item-active' :
+                                            'menu-dropdown-item-inactive'">
+                                        Add Books
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown Menu End -->
+                    </li>
                 </ul>
             </div>
 

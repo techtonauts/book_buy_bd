@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProducImageController;
+use App\Http\Controllers\Admin\BookController;
 
 // Frontend Routes
 // Auth Routes
@@ -45,5 +46,13 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
         Route::get('/create', 'showCreate')->name('show.create.category');
         Route::post('/create', 'store')->name('store.category');
         Route::post('/update/{id}', 'update')->name('update.category');
+        Route::post('/delete/{id}', 'delete')->name('delete.category');
+    });
+
+    // Book Routes
+    Route::controller(BookController::class)->prefix('books')->group(function () {
+        Route::get('/all', 'index')->name('show.books');
+        Route::get('/create', 'showCreate')->name('show.create.books');
+        Route::post('/create', 'store')->name('store.books');
     });
 });

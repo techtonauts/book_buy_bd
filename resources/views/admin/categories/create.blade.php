@@ -100,18 +100,3 @@
         </div>
     </div>
 @endsection
-
-
-@section('scripts')
-    @session('success')
-        <script>
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "{{ $value }}",
-                showConfirmButton: false,
-                timer: 1500
-            });
-        </script>
-    @endsession
-@endsection

@@ -7,7 +7,7 @@
                     <th class="px-5 py-3 sm:px-6">
                         <div class="flex items-center">
                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                                Name
+                                Book
                             </p>
                         </div>
                     </th>
@@ -21,14 +21,21 @@
                     <th class="px-5 py-3 sm:px-6">
                         <div class="flex items-center">
                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                                No. of Subcategories
+                                Category
                             </p>
                         </div>
                     </th>
                     <th class="px-5 py-3 sm:px-6">
                         <div class="flex items-center">
                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                                No. of Products
+                                Stock
+                            </p>
+                        </div>
+                    </th>
+                    <th class="px-5 py-3 sm:px-6">
+                        <div class="flex items-center">
+                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                Prices
                             </p>
                         </div>
                     </th>
@@ -44,17 +51,30 @@
             <!-- table header end -->
             <!-- table body start -->
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                @foreach ($mainCategories as $category)
+                @foreach ($books as $book)
                     <tr>
                         <td class="px-5 py-4 sm:px-6">
                             <div class="flex items-center">
-                                <h3 class="text-gray-500  dark:text-gray-400">{{ $category->name }}</h3>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 overflow-hidden rounded-full">
+                                        <img src="./images/user/user-17.jpg" alt="brand" />
+                                    </div>
+
+                                    <div>
+                                        <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                            {{ $book->name }}
+                                        </span>
+                                        <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
+                                            {{ $book->edition ?? '' }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                         <td class="px-5 py-4 sm:px-6">
                             <div class="flex items-center">
                                 <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                                    {{ $category->slug }}
+                                    {{ $book->slug }}
                                 </p>
                             </div>
                         </td>
@@ -62,7 +82,7 @@
                             <div class="flex items-center">
                                 <p
                                     class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                                    {{ $category->children_count }}
+                                    {{ $book->category->name }}
                                 </p>
                             </div>
                         </td>
@@ -70,38 +90,37 @@
                             <div class="flex items-center">
                                 <p
                                     class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                                    {{ $category->products_count }}
+                                    {{ $book->stock }}
                                 </p>
                             </div>
                         </td>
                         <td class="px-5 py-4 sm:px-6">
                             <div class="flex items-center space-x-4">
-                                <x-ui.modal title="Update Category"
+                                <x-ui.modal title="Update book"
                                     triggerClass="font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
                                     <x-slot name="trigger">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </x-slot>
-                                    @include('admin.categories.edit', [
-                                        'category' => $category,
+                                    {{-- @include('admin.categories.edit', [
+                                        'book' => $book,
                                         'mainCategories' => $mainCategories,
-                                    ])
+                                    ]) --}}
                                 </x-ui.modal>
 
-                                <x-ui.modal title="Delete Category" hasFooter="true"
+                                <x-ui.modal title="Delete book" hasFooter="true"
                                     triggerClass="font-medium text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
                                     <x-slot name="trigger">
                                         <i class="fa-solid fa-trash"></i>
                                     </x-slot>
                                     <div class="flex flex-col px-6 items-center justify-center space-y-6">
                                         <p class="font-semibold text-gray-500 dark:text-gray-400">
-                                            Are you sure you want to delete this category?
-                                            All the products under this category will also be deleted
+                                            Are you sure you want to delete this book?
+                                            All the images for this book will also be deleted
                                         </p>
                                         <p class="text-red-500">This action cannot be undone.</p>
                                     </div>
                                     <x-slot name="confirmButton">
-                                        <form action="{{ route('admin.delete.category', ['id' => $category->id]) }}"
-                                            method="POST" class="ml-4">
+                                        <form action="#" method="POST" class="ml-4">
                                             @csrf
                                             <button type="submit"
                                                 class="bg-red-500 px-4 py-2 border rounded-lg font-medium text-white hover:text-red-700 hover:bg-transparent dark:text-red-400 dark:hover:text-red-300">
