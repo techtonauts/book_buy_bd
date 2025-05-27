@@ -30,3 +30,30 @@
         </div>
     </div>
 @endsection
+
+@section('scripts')
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                showAlert({
+                    icon: 'success',
+                    title: '{{ session('success') }}',
+                    position: 'top-end',
+                    timer: 2500
+                });
+            });
+        </script>
+    @elseif (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                showAlert({
+                    icon: 'error',
+                    title: '{{ session('error') }}',
+                    position: 'top-end',
+                    timer: 2500
+                });
+            });
+        </script>
+    @endif
+
+@endsection

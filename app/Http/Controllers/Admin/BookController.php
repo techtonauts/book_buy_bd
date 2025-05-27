@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use HTMLPurifier;
+use HTMLPurifier_Config;
+
+
 
 class BookController extends Controller
 {
@@ -24,21 +30,114 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'author' => 'required|string|max:255',
-        //     'category_id' => 'required|exists:categories,id',
-        //     'price' => 'required|numeric|min:0',
-        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // ]);
 
-        // $book = Book::create($request->only('title', 'author', 'category_id', 'price'));
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'sku' => 'required|string|max:255|unique:books,sku',
+            'description' => 'required|string|min:10|max:2000',
+            'author' => 'nullable|string|max:255',
+            'edition' => 'nullable|string|max:255',
+            'stock' => 'required|numeric|integer',
+            'slug' => 'required|string|max:255|unique:books,slug',
+            'category_id' => 'required|exists:App\Models\Category,id',
+            'bookImages' => 'nullable|array|max:5',
+            'prices' => [
+                'required',
+                'json',
+                function ($attribute, $value, $fail) {
+                    $decoded = json_decode($value, true);
 
-        // if ($request->hasFile('image')) {
-        //     $path = $request->file('image')->store('books', 'public');
-        //     $book->images()->create(['path' => $path]);
-        // }
+                    if (!is_array($decoded) || count($decoded) === 0) {
+                        $fail('The :attribute must contain at least one item.');
+                    }
+
+                    if (!array_is_list($decoded)) {
+                        // It's an object, make sure it has at least one property
+                        if (count($decoded) === 0) {
+                            $fail('The :attribute must contain at least one property.');
+                        }
+                    } else {
+                        // It's a list — check that it contains at least one object
+                        if (!collect($decoded)->contains(fn($item) => is_array($item))) {
+                            $fail('The :attribute must contain at least one object.');
+                        }
+                    }
+                },
+            ],
+        ]);
+
+        // Create HTML purifier instance
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+
+        // Create the product
+
+        $book = Book::create([
+            'name' => $validated['name'],
+            'sku' => $validated['sku'],
+            'description' => $purifier->purify($validated['description']),
+            'author' => $validated['author'],
+            'edition' => $validated['edition'],
+            'stock' => (int) $validated['stock'],
+            'slug' => $validated['slug'],
+            'category_id' => $validated['category_id'],
+        ]);
+
+        if (!$book) {
+            return redirect()->route('admin.show.create.books')->with('error', 'Failed creating book!');
+        }
+
+        // Handle prices
+        $prices = json_decode($validated['prices'], true);
+        if (is_array($prices) && count($prices) > 0) {
+            foreach ($prices as $type => $price) {
+                $book->prices()->create([
+                    'print_type' => $type,
+                    'price' => (int)$price ?? 0,
+                ]);
+            }
+        }
+
+        // Handle temp images
+        $storedImagePaths = [];
+
+        if ($request->has('bookImages')) {
+            foreach ($validated['bookImages'] as $tempPath) {
+                if (Storage::disk('public')->exists($tempPath)) {
+                    // Strip "storage/" prefix if present
+                    $relativePath = str_replace('storage/', '', $tempPath);
+
+                    $newPath = 'book-images/' . uniqid() . '_' . substr(basename($relativePath), 6);
+
+                    Storage::disk('public')->move($relativePath, $newPath);
+
+                    // Save image record to DB, or associate with book
+                    $book->images()->create([
+                        'name' => basename($newPath),
+                        'url' => $newPath,
+                    ]);
+
+                    $storedImagePaths[] = $newPath;
+                }
+            }
+        }
 
         return redirect()->route('admin.show.books')->with('success', 'Book created successfully.');
+    }
+
+
+    public function showUpdate(Request $request, $id)
+    {
+        $book = Book::with(['images', 'prices'])->findOrFail($id);
+
+        $categories = Category::get();
+
+        return view('admin.books.update', compact('book', 'categories'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        dd($request->all());
     }
 }

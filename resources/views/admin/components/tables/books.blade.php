@@ -4,7 +4,7 @@
             <!-- table header start -->
             <thead>
                 <tr class="border-b border-gray-100 dark:border-gray-800">
-                    <th class="px-5 py-3 sm:px-6">
+                    <th class="px-3 py-3 sm:px-6">
                         <div class="flex items-center">
                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                                 Book
@@ -27,14 +27,14 @@
                     </th>
                     <th class="px-5 py-3 sm:px-6">
                         <div class="flex items-center">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                            <p class="font-medium text-center text-gray-500 text-theme-xs dark:text-gray-400">
                                 Stock
                             </p>
                         </div>
                     </th>
                     <th class="px-5 py-3 sm:px-6">
-                        <div class="flex items-center">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        <div class="flex items-center justify-center">
+                            <p class="font-medium text-center text-gray-500 text-theme-xs dark:text-gray-400">
                                 Prices
                             </p>
                         </div>
@@ -53,11 +53,12 @@
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                 @foreach ($books as $book)
                     <tr>
-                        <td class="px-5 py-4 sm:px-6">
+                        <td class="px-3 py-4 sm:px-6">
                             <div class="flex items-center">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 overflow-hidden rounded-full">
-                                        <img src="./images/user/user-17.jpg" alt="brand" />
+                                    <div class="w-12 h-12 overflow-hidden rounded-sm">
+                                        <img src="{{ asset('storage/' . ($book->images[0]->url ?? '')) }}"
+                                            alt="brand" />
                                     </div>
 
                                     <div>
@@ -74,7 +75,7 @@
                         <td class="px-5 py-4 sm:px-6">
                             <div class="flex items-center">
                                 <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                                    {{ $book->slug }}
+                                    {{ substr($book->slug, 0, 10) . '...' }}
                                 </p>
                             </div>
                         </td>
@@ -95,17 +96,24 @@
                             </div>
                         </td>
                         <td class="px-5 py-4 sm:px-6">
+                            <div class="flex flex-col justify-center items-center space-y-2">
+                                @foreach ($book->prices as $price)
+                                    <p
+                                        class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
+                                        {{ $price->print_type }}
+                                        <span>: {{ $price->price }}</span>
+                                    </p>
+                                @endforeach
+                            </div>
+                        </td>
+                        <td class="px-5 py-4 sm:px-6">
                             <div class="flex items-center space-x-4">
-                                <x-ui.modal title="Update book"
-                                    triggerClass="font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-                                    <x-slot name="trigger">
+                                <button
+                                    class="font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                                    <a href="{{ route('admin.show.update.books', ['id' => $book->id]) }}">
                                         <i class="fa-solid fa-pen-to-square"></i>
-                                    </x-slot>
-                                    {{-- @include('admin.categories.edit', [
-                                        'book' => $book,
-                                        'mainCategories' => $mainCategories,
-                                    ]) --}}
-                                </x-ui.modal>
+                                    </a>
+                                </button>
 
                                 <x-ui.modal title="Delete book" hasFooter="true"
                                     triggerClass="font-medium text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">

@@ -9,6 +9,7 @@ class BookImage extends Model
     protected $fillable = [
         'book_id',
         'name',
+        'url',
     ];
 
     public function book()
