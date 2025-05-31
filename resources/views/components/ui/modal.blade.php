@@ -8,12 +8,9 @@
 
     <!-- Modal Overlay and Content -->
     <div x-show="open" x-cloak @click.away="open = false"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 transition-opacity duration-300"
+        class="fixed inset-0 z-50 flex items-center justify-center dark:bg-black/40 backdrop-blur-sm"
         aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100" x-transition:leave="ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-            class="relative rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="relative rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
             <!-- Close Button -->
             <button @click="open = false"
                 class="absolute top-5 right-5 z-50 text-gray-400 hover:text-red-500 focus:outline-none"

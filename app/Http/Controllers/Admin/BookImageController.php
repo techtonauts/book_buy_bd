@@ -41,9 +41,10 @@ class BookImageController extends Controller
         $relativePath = str_replace('storage/', '', $path);
 
         // Delete from public storage
+
         $fullPath = storage_path('app/public/' . $relativePath);
 
-        if (file_exists($fullPath)) {
+        if (file_exists($fullPath) && is_file($fullPath)) {
             unlink($fullPath);
             return response()->json(['success' => true]);
         }
@@ -54,8 +55,13 @@ class BookImageController extends Controller
     public function deleteExisting(Request $request)
     {
         $path = $request->input('path');
-        if ($path && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+
+
+        $relativePath = env('BOOK_IMAGES_PATH', 'book-images/') . basename($path);
+
+
+        if ($path && Storage::disk('public')->exists($relativePath)) {
+            Storage::disk('public')->delete($relativePath);
 
             // Optional: Remove DB reference
             // e.g. remove $path from $book->images and save()
@@ -64,14 +70,5 @@ class BookImageController extends Controller
         }
 
         return response()->json(['success' => false], 404);
-    }
-
-    public function delete(Request $request, $id)
-    {
-        $image = BookImage::findOrFail($id);
-        Storage::disk('public')->delete($image->url);
-        $image->delete();
-
-        return response()->json(['success' => true]);
     }
 }

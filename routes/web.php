@@ -57,11 +57,11 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
         Route::post('/create', 'store')->name('store.books');
         Route::get('/update/{id}', 'showUpdate')->name('show.update.books');
         Route::post('/update/{id}', 'update')->name('update.books');
+        Route::post('/delete/{id}', 'delete')->name('delete.books');
     });
 
     // Book Image Routes
     Route::controller(BookImageController::class)->prefix('book-images')->group(function () {
-        Route::post('/delete/{id}', 'delete')->name('delete.book.image');
         Route::post('/upload-temp', 'uploadTemp')->name('upload.temp.book.images');
         Route::post('/delete-temp', 'deleteTemp')->name('delete.temp.book.images');
         Route::post('/delete-existing', 'deleteExisting')->name('delete.existing.book.images');

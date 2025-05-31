@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const form = dropzoneElement.closest("form");
 
                     const uploadedPaths = []; // store uploaded file paths
+                    const uploadedFiles = new Set();
 
                     this.on("sending", function (file, xhr, formData) {
                         const token = document
@@ -102,8 +103,23 @@ document.addEventListener("DOMContentLoaded", () => {
                             .getAttribute("content");
                         formData.append("_token", token);
                     });
-                    // Validate max files
+
                     this.on("addedfile", function (file) {
+                        // check for duplicate images
+                        const fileKey = `${file.name}-${file.size}`;
+                        if (uploadedFiles.has(fileKey)) {
+                            this.removeFile(file);
+                            showAlert({
+                                icon: "warning",
+                                title: "Duplicate image detected",
+                                position: "top-end",
+                                timer: 2000,
+                            });
+                        } else {
+                            uploadedFiles.add(fileKey);
+                        }
+
+                        // Validate max files
                         const totalFiles =
                             dropzoneInstance.getAcceptedFiles().length;
                         if (totalFiles > dropzoneInstance.options.maxFiles) {
@@ -147,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     this.on("removedfile", function (file) {
+                        const fileKey = `${file.name}-${file.size}`;
                         // Find the corresponding hidden input and remove it from the form
                         const form = dropzoneElement.closest("form");
 
@@ -183,6 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
                                             timer: 1500,
                                         });
                                     }
+                                    if (data.success) {
+                                        uploadedFiles.delete(fileKey);
+                                    }
                                 })
                                 .catch((err) => {
                                     console.error(err);
@@ -216,8 +236,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 dropzoneElement.dataset.existingImages || "[]"
             );
 
-            console.log(existingImages);
-
             const myDropzone = new Dropzone("#book-image-upload", {
                 url: "/admin/book-images/upload-temp",
                 paramName: "images",
@@ -231,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const dropzoneInstance = this;
                     const form = dropzoneElement.closest("form");
 
-                    const uploadedPaths = [];
+                    const uploadedFiles = new Set();
 
                     // Load existing images
                     existingImages.forEach(({ name, url }) => {
@@ -262,6 +280,36 @@ document.addEventListener("DOMContentLoaded", () => {
                         formData.append("_token", token);
                     });
 
+                    this.on("addedfile", function (file) {
+                        // check for duplicate images
+                        const fileKey = `${file.name}-${file.size}`;
+                        file._deleted = false;
+                        if (uploadedFiles.has(fileKey)) {
+                            this.removeFile(file);
+                            showAlert({
+                                icon: "warning",
+                                title: "Duplicate image detected, deleting!",
+                                position: "top-end",
+                                timer: 2000,
+                            });
+                        } else {
+                            uploadedFiles.add(fileKey);
+                        }
+
+                        // Validate max files
+                        const totalFiles =
+                            dropzoneInstance.getAcceptedFiles().length;
+                        if (totalFiles > dropzoneInstance.options.maxFiles) {
+                            dropzoneInstance.removeFile(file);
+                            showAlert({
+                                icon: "error",
+                                title: "Maximum 5 images allowed",
+                                position: "top-end",
+                                timer: 2000,
+                            });
+                        }
+                    });
+
                     this.on("successmultiple", function (files, response) {
                         if (response.paths) {
                             response.paths.forEach((path, index) => {
@@ -277,10 +325,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     this.on("removedfile", function (file) {
+                        // Prevent multiple calls for same file
+                        if (file._deleted || !file.uploadPath) return; // avoid double deletion
+
+                        const fileKey = `${file.name}-${file.size}`;
+
                         const input = form.querySelector(
                             `input[type="hidden"][value="${file.uploadPath}"]`
                         );
-                        if (input) input.remove();
 
                         const isExisting = file.isExisting;
 
@@ -308,9 +360,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                         timer: 1500,
                                     });
                                 }
+                                if (data.success) {
+                                    uploadedFiles.delete(fileKey);
+                                    file._deleted = true;
+                                    if (input) input.remove();
+                                }
                             })
                             .catch((err) => {
-                                console.error(err);
                                 showAlert({
                                     icon: "error",
                                     title: "Error deleting image",

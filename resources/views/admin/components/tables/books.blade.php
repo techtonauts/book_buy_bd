@@ -56,8 +56,9 @@
                         <td class="px-3 py-4 sm:px-6">
                             <div class="flex items-center">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 overflow-hidden rounded-sm">
-                                        <img src="{{ asset('storage/' . ($book->images[0]->url ?? '')) }}"
+                                    <div class="overflow-hidden">
+                                        <img class="w-16 h-12 object-scale-down rounded-md"
+                                            src="{{ count($book->images) > 0 ? asset('storage/' . $book->images[0]->url) : asset('images/product_placeholder.png') }}"
                                             alt="brand" />
                                     </div>
 
@@ -115,23 +116,30 @@
                                     </a>
                                 </button>
 
-                                <x-ui.modal title="Delete book" hasFooter="true"
+                                <x-ui.modal title="Confirm Deleting Book" hasFooter="true"
                                     triggerClass="font-medium text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
                                     <x-slot name="trigger">
                                         <i class="fa-solid fa-trash"></i>
                                     </x-slot>
                                     <div class="flex flex-col px-6 items-center justify-center space-y-6">
-                                        <p class="font-semibold text-gray-500 dark:text-gray-400">
-                                            Are you sure you want to delete this book?
-                                            All the images for this book will also be deleted
+                                        <p class="text-red-500 p-4 m-4"><i
+                                                class="fa-solid fa-2xl fa-triangle-exclamation"></i>
+                                        </p>
+                                        <p class="font-semibold text-gray-500 dark:text-gray-300">
+                                            Are you sure you want to delete the book
+                                            {{ $book->name }}?
+
+                                        </p>
+                                        <p class="dark:text-gray-300">All the images for this book will also be deleted
                                         </p>
                                         <p class="text-red-500">This action cannot be undone.</p>
                                     </div>
                                     <x-slot name="confirmButton">
-                                        <form action="#" method="POST" class="ml-4">
+                                        <form action="{{ route('admin.delete.books', ['id' => $book->id]) }}"
+                                            method="POST" class="ml-4">
                                             @csrf
                                             <button type="submit"
-                                                class="bg-red-500 px-4 py-2 border rounded-lg font-medium text-white hover:text-red-700 hover:bg-transparent dark:text-red-400 dark:hover:text-red-300">
+                                                class="bg-red-500 px-4 py-2 border rounded-lg font-medium text-white hover:text-red-700 hover:bg-transparent dark:hover:text-red-300">
                                                 Confirm Delete
                                             </button>
                                         </form>

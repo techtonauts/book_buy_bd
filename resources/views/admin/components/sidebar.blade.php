@@ -192,10 +192,12 @@
                     <li>
                         <a href="#" @click.prevent="selected = (selected === 'Books' ? '':'Books')"
                             class="menu-item group"
-                            :class="(selected === 'Books') || (page === 'allBooks' || page==='createBooks') ?
+                            :class="(selected === 'Books') || (page === 'allBooks' || page==='createBooks' ||
+                                page==='updateBooks') ?
                             'menu-item-active' : 'menu-item-inactive'">
                             <i
-                                :class="(selected === 'Books') || (page === 'allBooks' || page==='createBooks') ?
+                                :class="(selected === 'Books') || (page === 'allBooks' || page==='createBooks' ||
+                                    page==='updateBooks') ?
                                 'menu-item-icon-active fa-solid fa-book fa-lg' :
                                 'menu-item-icon-inactive fa-solid fa-book fa-lg'">
                             </i>

@@ -258,7 +258,7 @@
                     <div class="w-full text-center px-2.5">
                         <button type="submit"
                             class="flex items-center justify-center w-full gap-2 p-3 text-sm font-medium text-white transition-colors rounded-lg bg-brand-500 hover:bg-brand-600">
-                            Add Book
+                            Update Book
                         </button>
                     </div>
             </div>
